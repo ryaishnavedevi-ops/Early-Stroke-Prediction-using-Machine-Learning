@@ -1,1 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
 
+  <style>
+
+body{
+    background-image: url("{{ url_for('static', filename='images/stroke_bg.jpg') }}");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+/* overlay so text is readable */
+body::before{
+    content: "";
+    position: fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(0,0,0,0.35);
+    z-index:-1;
+}
+
+/* main container */
+.container{
+    background: rgba(255,255,255,0.9);
+    padding:40px;
+    border-radius:15px;
+    max-width:1000px;
+    margin:auto;
+}
+
+</style>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Stroke Risk Prediction</title>
+
+  <!-- Human-friendly font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+
+    <header class="hero">
+      <h1>Stroke Risk Prediction</h1>
+      <p>Enter the required details below </p>
+      
+    </header>
+
+    <div class="card">
+      <form method="POST" class="form-grid">
+
+        <!-- Gender -->
+        <div class="field">
+          <label for="gender">Gender</label>
+          <select name="gender" id="gender" required>
+            <option value="" {% if form_values.get('gender', '') == '' %}selected{% endif %}>Select</option>
+            <option value="Male" {% if form_values.get('gender') == 'Male' %}selected{% endif %}>Male</option>
+            <option value="Female" {% if form_values.get('gender') == 'Female' %}selected{% endif %}>Female</option>
+          </select>
+        </div>
+
+        <!-- Age -->
+        <div class="field">
+          <label for="age">Age</label>
+          <input
+            type="number"
+            name="age"
+            id="age"
+            min="1"
+            max="120"
+            step="1"
+            placeholder="e.g. 45"
+            value="{{ form_values.get('age', '') }}"
+            required
+          >
+        </div>
+
+        <!-- Hypertension -->
+        <div class="field">
+          <label for="hypertension">Hypertension</label>
+          <select name="hypertension" id="hypertension" required>
+            <option value="" {% if form_values.get('hypertension', '') == '' %}selected{% endif %}>Select</option>
+            <option value="0" {% if form_values.get('hypertension') == '0' %}selected{% endif %}>No</option>
+            <option value="1" {% if form_values.get('hypertension') == '1' %}selected{% endif %}>Yes</option>
+          </select>
+        </div>
+
+        <!-- Heart Disease -->
+        <div class="field">
+          <label for="heart_disease">Heart Disease</label>
+          <select name="heart_disease" id="heart_disease" required>
+            <option value="" {% if form_values.get('heart_disease', '') == '' %}selected{% endif %}>Select</option>
+            <option value="0" {% if form_values.get('heart_disease') == '0' %}selected{% endif %}>No</option>
+            <option value="1" {% if form_values.get('heart_disease') == '1' %}selected{% endif %}>Yes</option>
+          </select>
+        </div>
+
+        <!-- Ever Married -->
+        <div class="field">
+          <label for="ever_married">Ever Married</label>
+          <select name="ever_married" id="ever_married" required>
+            <option value="" {% if form_values.get('ever_married', '') == '' %}selected{% endif %}>Select</option>
+            <option value="Yes" {% if form_values.get('ever_married') == 'Yes' %}selected{% endif %}>Yes</option>
+            <option value="No" {% if form_values.get('ever_married') == 'No' %}selected{% endif %}>No</option>
+          </select>
+        </div>
+
+        <!-- Work Type -->
+        <div class="field">
+          <label for="work_type">Work Type</label>
+          <select name="work_type" id="work_type" required>
+            <option value="" {% if form_values.get('work_type', '') == '' %}selected{% endif %}>Select</option>
+            <option value="Private" {% if form_values.get('work_type') == 'Private' %}selected{% endif %}>Private</option>
+            <option value="Self-employed" {% if form_values.get('work_type') == 'Self-employed' %}selected{% endif %}>Self-employed</option>
+            <option value="Govt_job" {% if form_values.get('work_type') == 'Govt_job' %}selected{% endif %}>Govt_job</option>
+            <option value="children" {% if form_values.get('work_type') == 'children' %}selected{% endif %}>children</option>
+            <option value="Never_worked" {% if form_values.get('work_type') == 'Never_worked' %}selected{% endif %}>Never_worked</option>
+          </select>
+        </div>
+
+        <!-- Residence Type -->
+        <div class="field">
+          <label for="residence_type">Residence Type</label>
+          <select name="residence_type" id="residence_type" required>
+            <option value="" {% if form_values.get('residence_type', '') == '' %}selected{% endif %}>Select</option>
+            <option value="Urban" {% if form_values.get('residence_type') == 'Urban' %}selected{% endif %}>Urban</option>
+            <option value="Rural" {% if form_values.get('residence_type') == 'Rural' %}selected{% endif %}>Rural</option>
+          </select>
+        </div>
+
+        <!-- Avg Glucose Level -->
+        <div class="field">
+          <label for="avg_glucose_level">Average Glucose Level</label>
+          <input
+            type="number"
+            name="avg_glucose_level"
+            id="avg_glucose_level"
+            min="1"
+            max="500"
+            step="0.01"
+            placeholder="e.g. 95.5"
+            value="{{ form_values.get('avg_glucose_level', '') }}"
+            required
+          >
+        </div>
+
+        <!-- BMI -->
+        <div class="field">
+          <label for="bmi">BMI</label>
+          <input
+            type="number"
+            name="bmi"
+            id="bmi"
+            min="5"
+            max="100"
+            step="0.1"
+            placeholder="e.g. 24.8"
+            value="{{ form_values.get('bmi', '') }}"
+            required
+          >
+        </div>
+
+        <!-- Smoking Status -->
+        <div class="field">
+          <label for="smoking_status">Smoking Status</label>
+          <select name="smoking_status" id="smoking_status" required>
+            <option value="" {% if form_values.get('smoking_status', '') == '' %}selected{% endif %}>Select</option>
+            <option value="formerly smoked" {% if form_values.get('smoking_status') == 'formerly smoked' %}selected{% endif %}>Formerly smoked</option>
+            <option value="never smoked" {% if form_values.get('smoking_status') == 'never smoked' %}selected{% endif %}>Never smoked</option>
+            <option value="smokes" {% if form_values.get('smoking_status') == 'smokes' %}selected{% endif %}>Smokes</option>
+            <option value="Unknown" {% if form_values.get('smoking_status') == 'Unknown' %}selected{% endif %}>Unknown</option>
+          </select>
+        </div>
+
+        <!-- Actions -->
+        <div class="actions">
+          <button type="submit" class="btn btn-primary">Predict</button>
+          <a href="{{ url_for('index') }}" class="btn btn-secondary" style="text-decoration:none; display:inline-flex; align-items:center; justify-content:center;">
+            Clear Form
+          </a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Error -->
+    {% if error %}
+      <div class="result-card error-card">
+        <h3>Error</h3>
+        <p>{{ error }}</p>
+      </div>
+    {% endif %}
+
+    <!-- Result -->
+    {% if result %}
+      <div class="result-card {% if 'Detected' in result.prediction %}result-flag{% else %}result-safe{% endif %}">
+        <h2>Predicted Result</h2>
+
+        <div class="verdict-pill {% if 'Detected' in result.prediction %}pill-flag{% else %}pill-safe{% endif %}">
+          {{ result.prediction }}
+        </div>
+
+        <div class="result-details">
+          <p><strong>Prediction Verdict:</strong> {{ result.prediction }}</p>
+        </div>
+
+    {% endif %}
+
+  </div>
+</body>
+</html>
