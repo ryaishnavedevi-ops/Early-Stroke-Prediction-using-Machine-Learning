@@ -7,3 +7,6 @@ OUTPUTS
 
 <img width="1037" height="883" alt="Screenshot 2026-03-18 075229" src="https://github.com/user-attachments/assets/046bd24e-2673-4042-b9dc-258d783efafa" />
 
+LINK
+
+https://agent-6a4d140d8efc0d--delightful-lollipop-27ddeb.netlify.app/
